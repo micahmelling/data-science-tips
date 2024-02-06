@@ -25,7 +25,7 @@ FOREST_PARAM_GRID = {
 
 model_named_tuple = namedtuple('model_config', {'model_name', 'model', 'param_space', 'iterations'})
 MODEL_TRAINING_LIST = [
-    model_named_tuple(model_name='random_forest', model=CalibratedClassifierCV(base_estimator=RandomForestClassifier()),
+    model_named_tuple(model_name='random_forest', model=CalibratedClassifierCV(estimator=RandomForestClassifier()),
                       param_space=FOREST_PARAM_GRID, iterations=15),
 ]
 
@@ -91,7 +91,7 @@ def plot_cumulative_gains_chart(y_test, probability_predictions):
 
 def plot_lift_curve_chart(y_test, probability_predictions):
     """
-    Produces a lif curve and saves it locally.
+    Produces a lift curve and saves it locally.
 
     :param y_test: y_test series
     :param probability_predictions: dataframe of probability predictions, with the first column being the negative
@@ -161,6 +161,7 @@ def main():
 
         calculate_probability_lift(y_test=y_test, probability_predictions=predictions_df['1_prob'])
         plot_calibration_curve(y_test=y_test, predictions=predictions_df['1_prob'], n_bins=10, bin_strategy='uniform')
+        plot_calibration_curve(y_test=y_test, predictions=predictions_df['1_prob'], n_bins=10, bin_strategy='quantile')
         plot_cumulative_gains_chart(y_test=y_test, probability_predictions=predictions_df[['0_prob', '1_prob']])
         plot_lift_curve_chart(y_test=y_test, probability_predictions=predictions_df[['0_prob', '1_prob']])
 
@@ -169,3 +170,7 @@ if __name__ == "__main__":
     main()
 
     # https://endtoenddatascience.com/chapter11-machine-learning-calibration
+    # lift and gain charts measure cardinality, not calibration
+
+    # https://howtolearnmachinelearning.com/articles/the-lift-curve-in-machine-learning/
+    # https://www2.cs.uregina.ca/~dbd/cs831/notes/lift_chart/lift_chart.html

@@ -1,6 +1,10 @@
+import sys
+
+import random
+
 import numpy as np
 import pandas as pd
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import Lasso
 from sklearn.model_selection import cross_val_score
 
 
@@ -33,6 +37,27 @@ def create_custom_ts_cv_splits(df: pd.DataFrame, start_year: int, end_year: int,
     return cv_splits
 
 
+def create_custom_panel_cv(train_df, individual_id, folds):
+    """
+    Creates a custom train-test split for cross validation. This helps prevent leakage of individual-level
+    effects.
+
+    :param train_df: pandas dataframe
+    :param individual_id: the id column to uniquely identify individual players
+    :param folds: the number of folds we want to use in k-fold cross validation
+    :return: a list of tuples; each list item represent a fold in the k-fold cross validation; the first tuple element
+    contains the indices of the training data, and the second tuple element contains the indices of the testing data
+    """
+    unique_ids = list(set(train_df[individual_id].tolist()))
+    test_set_id_sets = np.array_split(unique_ids, folds)
+    cv_splits = []
+    for test_set_id_set in test_set_id_sets:
+        temp_train_ids = train_df.loc[~train_df[individual_id].isin(test_set_id_set)].index.values.astype(int)
+        temp_test_ids = train_df.loc[train_df[individual_id].isin(test_set_id_set)].index.values.astype(int)
+        cv_splits.append((temp_train_ids, temp_test_ids))
+    return cv_splits
+
+
 if __name__ == "__main__":
     date_range = pd.date_range(start='1950-01-01', end='2023-01-01', freq='Y')
     time_series_target = np.random.randint(0, 100, size=len(date_range))
@@ -43,10 +68,38 @@ if __name__ == "__main__":
     print(time_series_df.head())
 
     cv_splits = create_custom_ts_cv_splits(time_series_df, start_year=1950, end_year=2023, cv_folds=5)
-    print(cv_splits)
+    for cv_split in cv_splits:
+        print(cv_split[0])
+        print(cv_split[1])
+        print()
 
     y = time_series_df['target']
     x = time_series_df.drop('target', axis=1)
 
-    score = cross_val_score(LogisticRegression(), x, y, cv=cv_splits, scoring='neg_mean_squared_error', n_jobs=-1)
+    score = cross_val_score(Lasso(), x, y, cv=cv_splits, scoring='neg_mean_squared_error', n_jobs=-1)
     print(score)
+
+    ###################################################################################################################
+
+    n_obs = 500
+    panel_target = np.random.randint(0, 100, size=n_obs)
+    panel_predictor = np.random.randint(0, 100, size=n_obs)
+    states = [random.choice(['MO', 'KS', 'OK', 'IA', 'IL']) for _ in range(n_obs)]
+    panel_df = pd.DataFrame({
+        'target': panel_target,
+        'predictor': panel_predictor,
+        'state': states
+    })
+    print(panel_df.head(10))
+
+    cv_splits = create_custom_panel_cv(train_df=panel_df, individual_id='state', folds=3)
+    for cv_split in cv_splits:
+        fold_train = panel_df.loc[panel_df.index.isin(cv_split[0])]
+        fold_test = panel_df.loc[panel_df.index.isin(cv_split[1])]
+        print('training fold states')
+        print(fold_train['state'].unique())
+        print('testing fold states')
+        print(fold_test['state'].unique())
+        print()
+
+

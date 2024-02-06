@@ -26,7 +26,8 @@ def drop_features(df, features_list):
     :param features_list: list of features to drop
     :returns: pandas dataframe
     """
-    df = df.drop(features_list, 1)
+    df = df.drop(features_list, axis=1)
+    print('dropper run')
     return df
 
 
@@ -64,9 +65,34 @@ if __name__ == "__main__":
         estimator=pipeline,
         x_train=x_train,
         y_train=y_train,
-        model_uid='random_forst',
+        model_uid='random_forest',
         param_space=FOREST_PARAM_GRID,
         iterations=5,
         cv_strategy=5,
         cv_scoring='neg_log_loss'
     )
+
+    # prevent feature leakage
+    # can be pickled together
+    # apply cleaning, wrangling, and prediction in one call
+
+    # import joblib
+    # pipe = joblib.load('random_forest_model.pkl')
+    # print(pipe)
+    #
+    # df = pd.DataFrame({
+    #     'price': np.random.randint(0, 100, size=1),
+    #     'amount': np.random.randint(0, 100, size=1),
+    # })
+    #
+    # prediction = pipe.predict(df)
+    # print(prediction[0])
+    # print()
+    # dropper = pipe.named_steps['dropper']
+    # model = pipe.named_steps['model']
+    # df = dropper.transform(df)
+    # print(df)
+    # print()
+    # prediction = model.predict(df)
+    # print(prediction[0])
+    #

@@ -193,7 +193,7 @@ if __name__ == "__main__":
         estimator=pipeline,
         x_train=x_train,
         y_train=y_train,
-        model_uid='random_forst',
+        model_uid='random_forest',
         param_space=FOREST_PARAM_GRID,
         iterations=5,
         cv_strategy=5,

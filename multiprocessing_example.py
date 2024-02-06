@@ -13,7 +13,7 @@ def _assemble_negative_and_positive_pairs(y_test, probability_predictions, subse
 
     :param y_test: y_test series
     :param probability_predictions: positive probability predictions series
-    :param subset_percentage: percentage of observations to keep, as finding all the the combinations of positive and
+    :param subset_percentage: percentage of observations to keep, as finding all the combinations of positive and
     negative can result in a combinatorial explosion; default is 0.1
     :returns: list
     """
@@ -31,7 +31,7 @@ def _assemble_negative_and_positive_pairs(y_test, probability_predictions, subse
 
 def _find_discordants(pairs):
     """
-    Finds the number of discordants, defined as the number of cases where predicted probability in\\of the negative
+    Finds the number of discordants, defined as the number of cases where predicted probability in the negative
     class observation is greater than the predicted probability of the positive class observation.
 
     :param pairs: tuple where the first element is the negative probability and the second element is the positive
