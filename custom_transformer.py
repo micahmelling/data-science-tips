@@ -61,15 +61,20 @@ if __name__ == "__main__":
         'teacher': ['a', 'a', 'b', 'a', 'b', 'b', 'c', 'c', 'a', 'd'],
         'advisor': ['b', 'c', 'c', 'a', 'd', 'd', 'a', 'b', 'a', 'c']
     })
-    print(df)
-    encoder = CentralityEncoder(node_column='teacher', edge_column='advisor')
-    df = encoder.fit_transform(df)
+    print('original data')
     print(df)
     print()
+    encoder = CentralityEncoder(node_column='teacher', edge_column='advisor')
+    df = encoder.fit_transform(df)
+    print('transformed data')
+    print(df)
+    print()
+    print('encoding mapping in memory')
     print(encoder.mapping_dict)
     print()
     joblib.dump(encoder, 'encoder.pkl')
     encoder = joblib.load('encoder.pkl')
+    print('encoding mapping after re-loading')
     print(encoder.mapping_dict)
     print()
 
@@ -78,8 +83,11 @@ if __name__ == "__main__":
         'teacher': ['a', 'b'],
         'advisor': ['c', 'd']
     })
+    print('new original data')
     print(df2)
+    print()
     df2 = encoder.transform(df2)
+    print('transformed new data with encoder read from disk')
     print(df2)
 
     import sys

@@ -66,6 +66,7 @@ if __name__ == "__main__":
     time_series_df['year'] = time_series_df['date'].astype(str).str[:4].astype(int)
     time_series_df = time_series_df.drop('date', axis=1)
     print(time_series_df.head())
+    print()
 
     cv_splits = create_custom_ts_cv_splits(time_series_df, start_year=1950, end_year=2023, cv_folds=5)
     for cv_split in cv_splits:
@@ -79,6 +80,9 @@ if __name__ == "__main__":
     score = cross_val_score(Lasso(), x, y, cv=cv_splits, scoring='neg_mean_squared_error', n_jobs=-1)
     print(score)
 
+    import sys
+    sys.exit()
+
     ###################################################################################################################
 
     n_obs = 500
@@ -91,6 +95,7 @@ if __name__ == "__main__":
         'state': states
     })
     print(panel_df.head(10))
+    print()
 
     cv_splits = create_custom_panel_cv(train_df=panel_df, individual_id='state', folds=3)
     for cv_split in cv_splits:
@@ -101,5 +106,3 @@ if __name__ == "__main__":
         print('testing fold states')
         print(fold_test['state'].unique())
         print()
-
-

@@ -170,7 +170,7 @@ if __name__ == "__main__":
     main()
 
     # https://endtoenddatascience.com/chapter11-machine-learning-calibration
-    # lift and gain charts measure cardinality, not calibration
 
+    # lift and gain charts measure cardinality, not calibration
     # https://howtolearnmachinelearning.com/articles/the-lift-curve-in-machine-learning/
     # https://www2.cs.uregina.ca/~dbd/cs831/notes/lift_chart/lift_chart.html
