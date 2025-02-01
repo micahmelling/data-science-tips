@@ -9,6 +9,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import cross_val_score, train_test_split
 from sklearn.pipeline import Pipeline
 
+
 FOREST_PARAM_GRID = {
     'model__max_depth': hp.uniformint('model__max_depth', 3, 16),
     'model__min_samples_leaf': hp.uniform('model__min_samples_leaf', 0.001, 0.01),
@@ -96,3 +97,4 @@ if __name__ == "__main__":
 
     # https://endtoenddatascience.com/chapter10-machine-learning
     # https://towardsdatascience.com/hyperopt-demystified-3e14006eb6fa
+    # https://towardsdatascience.com/a-conceptual-explanation-of-bayesian-model-based-hyperparameter-optimization-for-machine-learning-b8172278050f

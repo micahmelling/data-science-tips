@@ -83,7 +83,7 @@ if __name__ == "__main__":
         'teacher': ['a', 'b'],
         'advisor': ['c', 'd']
     })
-    print('new original data')
+    print('new data')
     print(df2)
     print()
     df2 = encoder.transform(df2)
