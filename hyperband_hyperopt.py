@@ -12,7 +12,7 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', None)
 
 
-def train_model(pipeline, x_train, y_train):
+def train_model(pipeline, x_train, y_train, search_space):
     def objective(params):
         pipeline.set_params(**params)
         score = cross_val_score(pipeline, x_train, y_train, cv=3, scoring='f1', n_jobs=-1)
@@ -44,7 +44,7 @@ if __name__ == "__main__":
         ('model', RandomForestClassifier())
     ])
 
-    search_space = {  # ②
+    rf_search_space = {  # ②
         "model__max_depth": tune.randint(3, 16),
         "model__min_samples_leaf": tune.uniform(0.001, 0.01),
         "model__max_features": tune.choice(['log2', 'sqrt']),
@@ -55,5 +55,5 @@ if __name__ == "__main__":
     y_df = df['gpa_b_and_up']
     x_df = df.drop('gpa_b_and_up', axis=1)
 
-    best_pipe = train_model(rf_pipeline, x_df, y_df)
+    best_pipe = train_model(rf_pipeline, x_df, y_df, rf_search_space)
     print(best_pipe)
