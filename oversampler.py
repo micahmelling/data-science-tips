@@ -37,3 +37,6 @@ if __name__ == "__main__":
     x_train, x_test, y_train, y_test = train_test_split(x_df, y_df, test_size=0.25, random_state=42)
     best_pipe = train_model(pipeline, x_df, y_df, rf_search_space)
     print(best_pipe)
+    print()
+    print(len(x_test))
+    print(len(best_pipe.predict(x_test)))
