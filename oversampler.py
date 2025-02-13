@@ -28,7 +28,7 @@ if __name__ == "__main__":
     y_df = df['gpa_b_and_up']
     x_df = df.drop('gpa_b_and_up', axis=1)
 
-    rf_search_space = {  # ②
+    rf_search_space = {
         "model__max_depth": tune.randint(3, 16),
         "model__min_samples_leaf": tune.uniform(0.001, 0.01),
         "model__max_features": tune.choice(['log2', 'sqrt']),

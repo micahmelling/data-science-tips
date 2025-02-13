@@ -30,7 +30,7 @@ def train_model(pipeline, x_train, y_train, search_space):
             num_samples=20,
             search_alg=algo,
         )
-    )  # ③
+    )
 
     results = tuner.fit()
     best_config = results.get_best_result(metric="score", mode="min").config
